@@ -1,12 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordition.API", "Wordition.API\Wordition.API.csproj", "{EC801EF9-3AB9-4F60-8EA9-81673C49930C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordition.API", "src\Wordition.API\Wordition.API.csproj", "{EC801EF9-3AB9-4F60-8EA9-81673C49930C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordition.Domain", "Wordition.Domain\Wordition.Domain.csproj", "{7F58E29A-1430-4341-8FA4-E18C5BEEB5B5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordition.Domain", "src\Wordition.Domain\Wordition.Domain.csproj", "{7F58E29A-1430-4341-8FA4-E18C5BEEB5B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordition.Application", "Wordition.Application\Wordition.Application.csproj", "{2015CF47-F3B0-485C-84F5-F2A6FB2C7E5D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordition.Application", "src\Wordition.Application\Wordition.Application.csproj", "{2015CF47-F3B0-485C-84F5-F2A6FB2C7E5D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordition.Infrastructure", "Wordition.Infrastructure\Wordition.Infrastructure.csproj", "{20FB55FD-3D23-4FF9-A9ED-DCAB8D48AD70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wordition.Infrastructure", "src\Wordition.Infrastructure\Wordition.Infrastructure.csproj", "{20FB55FD-3D23-4FF9-A9ED-DCAB8D48AD70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
