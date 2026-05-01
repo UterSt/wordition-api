@@ -10,7 +10,6 @@ public class User
     [MaxLength(50)]
     public string Login { get; set; }
     [Required]
-    [MaxLength(64)]
     public string PasswordHash { get; set; }
     public Email? Email { get; set; }
     public List<Card> Cards { get; set; } = new();

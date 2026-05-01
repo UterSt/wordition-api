@@ -2,7 +2,9 @@ using Microsoft.AspNetCore.Identity;
 using Wordition.Application.DTO;
 using Wordition.Application.Interfaces;
 using Wordition.Application.Interfaces.Repositories;
+using Wordition.Application.Interfaces.Services;
 using Wordition.Domain.Entities;
+using Wordition.Domain.ValueObjects;
 
 namespace Wordition.Application.Services;
 
@@ -39,8 +41,16 @@ public class AuthService : IAuthService
         };
     }
 
-    public bool RegisterAsync(string username, string password)
+    public async Task RegisterAsync(string username, string password, Email? email)
     {
-        return true;
+        var user = new User()
+        {
+            Id = Guid.NewGuid(),
+            Login = username,
+            Email = email
+        };
+        var passwordHash = _passwordHasher.HashPassword(user, password);
+        user.PasswordHash = passwordHash;
+        await _userRepository.AddUserAsync(user);
     }
 }

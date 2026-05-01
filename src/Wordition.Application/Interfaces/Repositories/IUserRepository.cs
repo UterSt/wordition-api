@@ -6,6 +6,7 @@ public interface IUserRepository
 {
     public Task<User?> GetByLoginAsync(string login);
     public Task<User?> GetByIdAsync(Guid id);
+    public Task AddUserAsync(User user);
     public Task<User?> UpdateAsync(User user);
     public bool DeleteAsync(Guid id);
     public Task<List<Card>> GetAllCardsAsync();

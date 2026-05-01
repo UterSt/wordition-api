@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Wordition.Application.DTO;
-using Wordition.Application.Interfaces;
+using Wordition.Application.Interfaces.Services;
 
 namespace Wordition.API.Controllers;
 
@@ -14,13 +14,14 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
     [HttpPost("register")]
-    public async Task<IActionResult> Registration()
+    public async Task<IActionResult> Registration([FromBody] AuthRequest request)
     {
-        return Ok();
+        await _authService.RegisterAsync(request.Login, request.Password, request.Email);
+        return Ok("Account created");
     }
 
     [HttpPost("login")]
-    public async Task<IActionResult> Login(AuthRequest request)
+    public async Task<IActionResult> Login([FromBody] AuthRequest request)
     {
         var response = await _authService.LoginAsync(request.Login, request.Password);
         if (response.Token == null)

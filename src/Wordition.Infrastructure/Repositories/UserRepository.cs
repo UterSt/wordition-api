@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Wordition.Application.Interfaces.Repositories;
 using Wordition.Domain.Entities;
@@ -23,6 +22,12 @@ public class UserRepository : IUserRepository
     public Task<User?> GetByIdAsync(Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task AddUserAsync(User user)
+    {
+        await _db.Users.AddAsync(user);
+        await _db.SaveChangesAsync();
     }
 
     public Task<User?> UpdateAsync(User user)

@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Wordition.Application.Interfaces;
 using Wordition.Application.Interfaces.Repositories;
+using Wordition.Application.Interfaces.Services;
 using Wordition.Application.Services;
 using Wordition.Infrastructure.Context;
 using Wordition.Infrastructure.Repositories;
