@@ -5,7 +5,7 @@ namespace Wordition.Domain.Entities;
 
 public class User
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     [Required]
     [MaxLength(50)]
     public string Login { get; set; }
@@ -15,5 +15,5 @@ public class User
     public Email? Email { get; set; }
     public List<Card> Cards { get; set; } = new();
     public List<Text> Texts { get; set; } = new();
-    public DateTime RegisteredAt { get; set; }
+    public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
 }

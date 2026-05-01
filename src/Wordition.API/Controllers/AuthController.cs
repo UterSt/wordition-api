@@ -1,0 +1,32 @@
+using Microsoft.AspNetCore.Mvc;
+using Wordition.Application.DTO;
+using Wordition.Application.Interfaces;
+
+namespace Wordition.API.Controllers;
+
+[ApiController]
+[Route("api/v1/[controller]")]
+public class AuthController : ControllerBase
+{
+    private readonly IAuthService _authService;
+    public AuthController(IAuthService authService)
+    {
+        _authService = authService;
+    }
+    [HttpPost("register")]
+    public async Task<IActionResult> Registration()
+    {
+        return Ok();
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> Login(AuthRequest request)
+    {
+        var response = await _authService.LoginAsync(request.Login, request.Password);
+        if (response.Token == null)
+        {
+            return Unauthorized();
+        }
+        return Ok(response);
+    }
+}

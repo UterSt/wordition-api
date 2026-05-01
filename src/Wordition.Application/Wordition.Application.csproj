@@ -10,4 +10,8 @@
       <ProjectReference Include="..\Wordition.Domain\Wordition.Domain.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.9" />
+    </ItemGroup>
+
 </Project>
