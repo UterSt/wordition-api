@@ -49,4 +49,27 @@ public class UserRepository : IUserRepository
     {
         throw new NotImplementedException();
     }
+
+    public async Task AddRefreshTokenAsync(RefreshToken refreshToken)
+    {
+        await _db.RefreshTokens.AddAsync(refreshToken);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<RefreshToken?> GetRefreshTokenAsync(string refreshToken)
+    {
+        return await _db.RefreshTokens.Include(rt => rt.User).FirstOrDefaultAsync(r => r.Token == refreshToken);
+    }
+
+    public async Task RemoveRefreshTokenAsync(string refreshToken)
+    {
+        await _db.RefreshTokens.Where(r => r.Token == refreshToken).ExecuteDeleteAsync();
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task RemoveRefreshTokenAsync(Guid id)
+    {
+        await _db.RefreshTokens.Where(r => r.UserId == id).ExecuteDeleteAsync();
+        await _db.SaveChangesAsync();
+    }
 }

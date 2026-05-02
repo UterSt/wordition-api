@@ -11,4 +11,8 @@ public interface IUserRepository
     public bool DeleteAsync(Guid id);
     public Task<List<Card>> GetAllCardsAsync();
     public Task<List<Text>> GetAllTextsAsync();
+    public Task AddRefreshTokenAsync(RefreshToken refreshToken);
+    public Task<RefreshToken?> GetRefreshTokenAsync(string refreshToken);
+    public Task RemoveRefreshTokenAsync(string refreshToken);
+    public Task RemoveRefreshTokenAsync(Guid id);
 }

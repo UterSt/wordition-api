@@ -1,21 +1,22 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Wordition.Application.Interfaces;
+using Wordition.Application.Interfaces.Services;
 using Wordition.Domain.Entities;
 
 namespace Wordition.Infrastructure.Services;
 
-public class JwtTokenService : IJwtTokenService
+public class TokenService : ITokenService
 {
     private readonly IConfiguration _configuration;
-    public JwtTokenService(IConfiguration cofiguration)
+    public TokenService(IConfiguration cofiguration)
     {
         _configuration = cofiguration;
     }
-    public string GenerateToken(User user)
+    public string GenerateJwtToken(User user)
     {
         var claims = new List<Claim>
         {
@@ -36,5 +37,22 @@ public class JwtTokenService : IJwtTokenService
             expires: DateTime.UtcNow.AddMinutes(30),
             signingCredentials: creds);
         return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+
+    public (string tokenForCookie, string token) GenerateRefreshToken()
+    {
+        var randomNumber = new byte[32];
+        RandomNumberGenerator.Fill(randomNumber);
+        var tokenForCookie = Convert.ToBase64String(randomNumber)
+            .Replace("/", "_")
+            .Replace("+", "-")
+            .TrimEnd('=');
+        var token = GetHashToken(tokenForCookie);
+        return (tokenForCookie, token);
+    }
+
+    public string GetHashToken(string token)
+    {
+        return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
     }
 }

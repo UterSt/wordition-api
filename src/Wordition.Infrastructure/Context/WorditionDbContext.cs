@@ -10,6 +10,7 @@ public class WorditionDbContext : DbContext
     public DbSet<Text> Texts { get; set; }
     public DbSet<Word> Words { get; set; }
     public DbSet<WordTranslation> WordTranslations { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public WorditionDbContext(DbContextOptions<WorditionDbContext> options) : base(options){}
 

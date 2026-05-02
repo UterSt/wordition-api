@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Identity;
 using Wordition.Application.DTO;
-using Wordition.Application.Interfaces;
 using Wordition.Application.Interfaces.Repositories;
 using Wordition.Application.Interfaces.Services;
 using Wordition.Domain.Entities;
@@ -11,33 +10,46 @@ namespace Wordition.Application.Services;
 public class AuthService : IAuthService
 {
     private readonly IUserRepository _userRepository;
-    private readonly IJwtTokenService _jwtTokenService;
+    private readonly ITokenService _tokenService;
     private readonly PasswordHasher<User> _passwordHasher;
-    public AuthService(IUserRepository userRepository, IJwtTokenService jwtTokenService)
+    public AuthService(IUserRepository userRepository, ITokenService tokenService)
     {
         _userRepository = userRepository;
-        _jwtTokenService = jwtTokenService;
+        _tokenService = tokenService;
         _passwordHasher = new PasswordHasher<User>();
     }
-    public async Task<AuthResponse> LoginAsync(string username, string password)
+    public async Task<AuthTokenDto> LoginAsync(string username, string password)
     {
         var user = await _userRepository.GetByLoginAsync(username);
-        if (user == null) return new AuthResponse()
+        if (user == null) return new AuthTokenDto()
         {
-            Token = null,
+            JwtToken = null,
+            RefreshToken = null,
         };
         var passwordVerificationResult = _passwordHasher.VerifyHashedPassword(user, user.PasswordHash, password);
         if (passwordVerificationResult == PasswordVerificationResult.Success)
         {
-            var token = _jwtTokenService.GenerateToken(user);
-            return new AuthResponse()
+            await _userRepository.RemoveRefreshTokenAsync(user.Id);
+            var jwtToken = _tokenService.GenerateJwtToken(user);
+            var generateResult = _tokenService.GenerateRefreshToken();
+            var refreshToken = new RefreshToken()
             {
-                Token = token,
+                Id = Guid.NewGuid(),
+                Token = generateResult.token,
+                UserId = user.Id,
+                User = user
+            };
+            await _userRepository.AddRefreshTokenAsync(refreshToken);
+            return new AuthTokenDto()
+            {
+                JwtToken = jwtToken,
+                RefreshToken = generateResult.tokenForCookie,
             };
         }
-        return new AuthResponse()
+        return new AuthTokenDto()
         {
-            Token = null,
+            JwtToken = null,
+            RefreshToken = null,
         };
     }
 
@@ -52,5 +64,38 @@ public class AuthService : IAuthService
         var passwordHash = _passwordHasher.HashPassword(user, password);
         user.PasswordHash = passwordHash;
         await _userRepository.AddUserAsync(user);
+    }
+
+    public async Task<AuthTokenDto> RefreshAsync(string refreshTokenFromCoockie)
+    {
+        
+        var refreshTokenResult = await _userRepository.GetRefreshTokenAsync(_tokenService.GetHashToken(refreshTokenFromCoockie));
+        if (refreshTokenResult == null || refreshTokenResult.ExpiresAt < DateTime.UtcNow)
+            return new AuthTokenDto()
+            {
+                JwtToken = null,
+                RefreshToken = null,
+            };
+
+        var generateResult = _tokenService.GenerateRefreshToken();
+        await _userRepository.RemoveRefreshTokenAsync(refreshTokenResult.Token);
+        var newRefreshToken = new RefreshToken()
+        {
+            Id = Guid.NewGuid(),
+            Token = generateResult.token,
+            UserId = refreshTokenResult.UserId,
+            User = refreshTokenResult.User,
+        };
+        await _userRepository.AddRefreshTokenAsync(newRefreshToken);
+        var newJwtToken = _tokenService.GenerateJwtToken(newRefreshToken.User);
+        return new AuthTokenDto()
+        {
+            JwtToken = newJwtToken,
+            RefreshToken = generateResult.tokenForCookie,
+        };
+    }
+    public async Task LogoutAsync(string refreshToken)
+    {
+        await _userRepository.RemoveRefreshTokenAsync(_tokenService.GetHashToken(refreshToken));
     }
 }
