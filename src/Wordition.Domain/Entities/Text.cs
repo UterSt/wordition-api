@@ -5,7 +5,7 @@ namespace Wordition.Domain.Entities;
 
 public class Text
 {
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public Guid UserId { get; set; }
     public User User { get; set; }
     [Required]

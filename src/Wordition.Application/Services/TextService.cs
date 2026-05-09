@@ -1,0 +1,51 @@
+using Wordition.Application.DTO;
+using Wordition.Application.Interfaces.Repositories;
+using Wordition.Application.Interfaces.Services;
+using Wordition.Domain.Entities;
+
+namespace Wordition.Application.Services;
+
+public class TextService : ITextService
+{
+    private readonly ITextRepository _textRepository;
+    
+    public TextService(ITextRepository textRepository)
+    {
+        _textRepository = textRepository;
+    }
+    
+    public async Task<List<TextResponse>> GetAllTextAsync(Guid userId)
+    {
+        var texts = await _textRepository.GetTextsAsync(userId);
+        return texts.Select(t => t.ToResponse()).ToList();
+    }
+
+    public async Task<List<Token>> GetTextAsync(Guid userId, Guid textId)
+    {
+        var text = await _textRepository.GetTextAsync(userId, textId);
+        if (text == null)
+            throw new Exception("Text not found");
+        var tokenizerText = TextTokenizer.Tokenize(text.Content);
+        return tokenizerText;
+    }
+
+    public async Task AddTextAsync(TextRequest textRequest, Guid userId)
+    {
+        var text = textRequest.ToEntity(userId);
+        text.Id = Guid.NewGuid();
+        text.CreatedAt = DateTime.UtcNow;
+        await _textRepository.AddTextAsync(text);
+    }
+
+    public async Task UpdateTextAsync(TextRequest textRequest, Guid userId, Guid textId)
+    {
+        var text = textRequest.ToEntity(userId);
+        text.Id = textId;
+        await _textRepository.UpdateTextAsync(text);
+    }
+
+    public async Task DeleteTextAsync(Guid userId, Guid textId)
+    {
+        await _textRepository.DeleteTextAsync(userId, textId);
+    }
+}

@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Wordition.Domain.Entities;
 
 namespace Wordition.Infrastructure.Context;
@@ -20,5 +21,10 @@ public class WorditionDbContext : DbContext
             .OwnsOne(u => u.Email)
             .Property(e => e.Value)
             .HasColumnName("Email");
+        
+        modelBuilder.Entity<Text>()
+            .Property(t => t.CreatedAt)
+            .ValueGeneratedOnAdd()
+            .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
     }
 }
