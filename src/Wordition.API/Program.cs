@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
+using Wordition.API.OpenApi;
 using Wordition.Application.Interfaces.Repositories;
 using Wordition.Application.Interfaces.Services;
 using Wordition.Application.Services;
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<WorditionDbContext>(option =>
 
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
-builder.Services.AddOpenApi();
+builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
