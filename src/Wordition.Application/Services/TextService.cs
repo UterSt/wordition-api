@@ -2,6 +2,7 @@ using Wordition.Application.DTO;
 using Wordition.Application.Interfaces.Repositories;
 using Wordition.Application.Interfaces.Services;
 using Wordition.Domain.Entities;
+using Wordition.Domain.Exceptions;
 
 namespace Wordition.Application.Services;
 
@@ -24,7 +25,7 @@ public class TextService : ITextService
     {
         var text = await _textRepository.GetTextAsync(userId, textId);
         if (text == null)
-            throw new Exception("Text not found");
+            throw new NotFoundException("Text", textId);
         var tokenizerText = TextTokenizer.Tokenize(text.Content);
         return tokenizerText;
     }

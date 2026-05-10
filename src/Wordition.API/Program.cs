@@ -7,6 +7,7 @@ using Wordition.Application.Interfaces.Repositories;
 using Wordition.Application.Interfaces.Services;
 using Wordition.Application.Services;
 using Wordition.Infrastructure.Context;
+using Wordition.Infrastructure.ExceptionHandlers;
 using Wordition.Infrastructure.Repositories;
 using Wordition.Infrastructure.Services;
 
@@ -15,6 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<WorditionDbContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
@@ -40,6 +43,8 @@ builder.Services.AddScoped<ITextService, TextService>();
 builder.Services.AddScoped<ITextRepository,  TextRepository>();
 
 var app = builder.Build();
+
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
