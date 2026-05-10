@@ -30,23 +30,30 @@ public class TextService : ITextService
         return tokenizerText;
     }
 
-    public async Task AddTextAsync(TextRequest textRequest, Guid userId)
+    public async Task<TextResponse> AddTextAsync(TextRequest textRequest, Guid userId)
     {
         var text = textRequest.ToEntity(userId);
         text.Id = Guid.NewGuid();
         text.CreatedAt = DateTime.UtcNow;
         await _textRepository.AddTextAsync(text);
+        return text.ToResponse();
     }
 
     public async Task UpdateTextAsync(TextRequest textRequest, Guid userId, Guid textId)
     {
-        var text = textRequest.ToEntity(userId);
+        var text = await _textRepository.GetTextAsync(userId, textId);
+        if (text == null)
+            throw new NotFoundException("Text", textId);
+        text = textRequest.ToEntity(userId);
         text.Id = textId;
         await _textRepository.UpdateTextAsync(text);
     }
 
     public async Task DeleteTextAsync(Guid userId, Guid textId)
     {
+        var text = await _textRepository.GetTextAsync(userId, textId);
+        if (text == null)
+            throw new NotFoundException("Text", textId);
         await _textRepository.DeleteTextAsync(userId, textId);
     }
 }

@@ -35,8 +35,8 @@ public class TextsController : ControllerBase
     [HttpPost("create")]
     public async Task<IActionResult> AddText(TextRequest request)
     {
-        await _textService.AddTextAsync(request,  GetUserId());
-        return Ok();
+        var response = await _textService.AddTextAsync(request,  GetUserId());
+        return CreatedAtAction(nameof(GetTokenText), new {textId = response.Id},  response);
     }
 
     [HttpPut("{textId}")]
