@@ -9,7 +9,7 @@ public class Text
     public Guid UserId { get; set; }
     public User User { get; set; }
     [Required]
-    [MaxLength(20)]
+    [MaxLength(100)]
     public string Title { get; set; }
     public string Content { get; set; }
     public Language Language { get; set; }
