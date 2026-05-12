@@ -3,6 +3,7 @@ using Wordition.Application.DTO;
 using Wordition.Application.Interfaces.Repositories;
 using Wordition.Application.Interfaces.Services;
 using Wordition.Domain.Entities;
+using Wordition.Domain.Exceptions;
 using Wordition.Domain.ValueObjects;
 
 namespace Wordition.Application.Services;
@@ -55,7 +56,11 @@ public class AuthService : IAuthService
 
     public async Task RegisterAsync(string username, string password, Email? email)
     {
-        var user = new User()
+        var user = await _userRepository.GetByLoginAsync(username);
+        if (user != null)
+            throw new NotUniqueLoginException(username);
+        
+        user = new User()
         {
             Id = Guid.NewGuid(),
             Login = username,

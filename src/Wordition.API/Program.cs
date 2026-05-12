@@ -18,8 +18,12 @@ builder.Services.AddDbContext<WorditionDbContext>(option =>
     option.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddProblemDetails();
+
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
+builder.Services.AddExceptionHandler<NotUniqueLoginHandler>();
+builder.Services.AddExceptionHandler<ForbiddenExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+
 builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
 builder.Services.AddControllers();
 builder.Services.AddAuthorization();
