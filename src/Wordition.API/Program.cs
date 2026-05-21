@@ -1,9 +1,11 @@
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Wordition.API.OpenApi;
+using Wordition.Application.DTO;
 using Wordition.Application.Interfaces.Repositories;
 using Wordition.Application.Interfaces.Services;
 using Wordition.Application.Services;
@@ -47,6 +49,10 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IUserRepository,  UserRepository>();
 builder.Services.AddScoped<ITextService, TextService>();
 builder.Services.AddScoped<ITextRepository,  TextRepository>();
+builder.Services.AddHttpClient<ITranslatorService, MyMemoryTranslatorService>(f =>
+{
+    f.BaseAddress = new Uri(builder.Configuration["Translator:BaseAddress"]!);
+});
 
 var app = builder.Build();
 
@@ -60,6 +66,12 @@ if (app.Environment.IsDevelopment())
         options.DisableAgent();
     });
 }
+
+app.MapPost("/test", async (ITranslatorService trans, TranslationRequest request) =>
+{
+    var result =  await trans.GetTranslationAsync(request);
+    return Results.Ok(result);
+});
 
 app.UseAuthentication();
 app.UseAuthorization();
