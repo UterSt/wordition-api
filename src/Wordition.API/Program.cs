@@ -24,6 +24,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddExceptionHandler<NotUniqueLoginHandler>();
 builder.Services.AddExceptionHandler<ForbiddenExceptionHandler>();
+builder.Services.AddExceptionHandler<BadGatewayExceptionHandler>();
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 
 builder.Services.AddOpenApi(options => options.AddDocumentTransformer<BearerSecuritySchemeTransformer>());
