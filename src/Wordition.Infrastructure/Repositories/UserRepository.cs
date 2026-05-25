@@ -40,16 +40,6 @@ public class UserRepository : IUserRepository
         throw new NotImplementedException();
     }
 
-    public Task<List<Card>> GetAllCardsAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<List<Text>> GetAllTextsAsync()
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task AddRefreshTokenAsync(RefreshToken refreshToken)
     {
         await _db.RefreshTokens.AddAsync(refreshToken);

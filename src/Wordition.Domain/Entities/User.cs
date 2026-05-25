@@ -12,7 +12,7 @@ public class User
     [Required]
     public string PasswordHash { get; set; }
     public Email? Email { get; set; }
-    public List<Card> Cards { get; set; } = new();
+    public List<WorditionCard> Cards { get; set; } = new();
     public List<Text> Texts { get; set; } = new();
     public DateTime RegisteredAt { get; set; } = DateTime.UtcNow;
 }

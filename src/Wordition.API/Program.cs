@@ -1,6 +1,9 @@
 using System.Text;
+using FSRS.Core.Configurations;
+using FSRS.Core.Extensions;
+using FSRS.Core.Interfaces;
+using FSRS.Core.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
@@ -54,6 +57,12 @@ builder.Services.AddHttpClient<ITranslatorService, MyMemoryTranslatorService>(f 
 {
     f.BaseAddress = new Uri(builder.Configuration["Translator:BaseAddress"]!);
 });
+builder.Services.AddSingleton<ISchedulerFactory>(new SchedulerFactory(new SchedulerOptions()
+{
+    DesiredRetention = 0.9,
+    MaximumInterval = 365,
+    EnableFuzzing = true,
+}));
 
 var app = builder.Build();
 

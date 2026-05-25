@@ -8,6 +8,6 @@ public class Word
     public int Id { get; set; }
     [Required]
     [MaxLength(20)]
-    public string Value { get; set; }
+    public required string Value { get; set; }
     public Language Language { get; set; }
 }
