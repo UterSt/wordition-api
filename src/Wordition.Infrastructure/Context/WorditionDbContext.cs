@@ -8,6 +8,7 @@ public class WorditionDbContext : DbContext
 {
     public DbSet<User> Users { get; set; }
     public DbSet<WorditionCard> Cards { get; set; }
+    public DbSet<CardReviewLog>  CardReviewLogs { get; set; }
     public DbSet<Text> Texts { get; set; }
     public DbSet<Word> Words { get; set; }
     public DbSet<WordTranslation> WordTranslations { get; set; }

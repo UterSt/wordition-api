@@ -8,5 +8,6 @@ public class CardRequest
     public string? ContextSentence { get; set; }
     public required string Translation { get; set; }
     public string? Definition {get; set; }
-    public Language Language { get; set; }
+    public Language SourceLanguage { get; set; }
+    public Language TranslationLanguage { get; set; }
 }

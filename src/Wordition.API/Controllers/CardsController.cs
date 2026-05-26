@@ -52,6 +52,13 @@ public class CardsController : ControllerBase
         await _cardService.DeleteCardAsync(GetUserId(), cardId);
         return Ok();
     }
+
+    [HttpPut("review/{cardId}")]
+    public async Task<IActionResult> ReviewCard(CardReviewRequest cardReviewRequest, Guid cardId)
+    {
+       var response = await _cardService.ReviewCardAsync(cardReviewRequest, GetUserId(), cardId);
+       return Ok(response);
+    }
     
     private Guid GetUserId()
     {

@@ -11,5 +11,5 @@ public class CardResponse
     public string? Definition {get; set; }
     public Language Language { get; set; }
     public DateTime Due {get; set; }
-    public DateTime CreatedAt { get; }
+    public DateTime CreatedAt { get; set; }
 }

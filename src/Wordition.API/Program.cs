@@ -63,6 +63,8 @@ builder.Services.AddSingleton<ISchedulerFactory>(new SchedulerFactory(new Schedu
     MaximumInterval = 365,
     EnableFuzzing = true,
 }));
+builder.Services.AddScoped<ICardService, CardService>();
+builder.Services.AddScoped<ICardRepository, CardRepository>();
 
 var app = builder.Build();
 
