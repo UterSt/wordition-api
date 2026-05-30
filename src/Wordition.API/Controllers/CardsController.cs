@@ -64,9 +64,8 @@ public class CardsController : ControllerBase
     [HttpGet("due")]
     public async Task<IActionResult> GetDue()
     {
-        var response = await _cardService.GetAllCardAsync(GetUserId());
-        var result = response.Where(r => r.Due < DateTime.UtcNow).ToList();
-        return Ok(result);
+        var response = await _cardService.GetAllDueCardsAsync(GetUserId());
+        return Ok(response);
     }
     
     private Guid GetUserId()

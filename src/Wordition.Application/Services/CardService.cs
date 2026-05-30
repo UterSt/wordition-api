@@ -30,6 +30,15 @@ public class CardService : ICardService
         return result;
     }
 
+    public async Task<List<CardResponse>> GetAllDueCardsAsync(Guid userId)
+    {
+        var response = await _cardRepository.GetDueCardsAsync(userId);
+        var result  = response
+            .Select(card => card.ToResponse())
+            .ToList();
+        return result;
+    }
+
     public async Task<CardResponse> GetCardAsync(Guid userId, Guid cardId)
     {
         var response = await _cardRepository.GetCardAsync(userId, cardId);

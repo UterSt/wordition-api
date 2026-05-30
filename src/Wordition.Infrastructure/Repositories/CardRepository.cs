@@ -25,6 +25,17 @@ public class CardRepository : ICardRepository
         return result;
     }
 
+    public async Task<List<WorditionCard>> GetDueCardsAsync(Guid userId)
+    {
+        var result = await _db.Cards
+            .Include(card => card.Translation)
+            .Include(card => card.Word)
+            .Where(card => card.UserId == userId)
+            .Where(card => card.Due <  DateTime.UtcNow)
+            .ToListAsync();
+        return result;
+    }
+
     public async Task<WorditionCard?> GetCardAsync(Guid userId, Guid cardId)
     {
         var result = await _db.Cards
@@ -53,7 +64,6 @@ public class CardRepository : ICardRepository
         cardEntity.ContextSentence = card.ContextSentence;
         cardEntity.Translation.Language = card.Translation.Language;
         cardEntity.Translation.Translation = card.Translation.Translation;
-        cardEntity.Translation.Language = card.Translation.Language;
         cardEntity.Translation.Definition = card.Translation.Definition;
         cardEntity.Word.Value = card.Word.Value;
         cardEntity.Word.Language = card.Word.Language;
