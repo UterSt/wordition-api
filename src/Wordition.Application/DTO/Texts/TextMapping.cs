@@ -1,6 +1,6 @@
 using Wordition.Domain.Entities;
 
-namespace Wordition.Application.DTO;
+namespace Wordition.Application.DTO.Texts;
 
 public static class TextMapping
 {

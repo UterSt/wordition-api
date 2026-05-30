@@ -19,4 +19,5 @@ public class WorditionCard
     public double? Stability {get; set; }
     public double? Difficulty { get; set; }
     public DateTime Due {get; set; }
+    public required LengthRepetitionIntervals Intervals {get; set; }
 }

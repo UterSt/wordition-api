@@ -1,6 +1,6 @@
 using FSRS.Core.Enums;
 
-namespace Wordition.Application.DTO;
+namespace Wordition.Application.DTO.Cards;
 
 public class CardReviewRequest
 {

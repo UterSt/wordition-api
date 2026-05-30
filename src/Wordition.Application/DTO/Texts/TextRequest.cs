@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Wordition.Domain.Enums;
 
-namespace Wordition.Application.DTO;
+namespace Wordition.Application.DTO.Texts;
 
 public class TextRequest
 {

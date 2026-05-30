@@ -27,5 +27,8 @@ public class WorditionDbContext : DbContext
             .Property(t => t.CreatedAt)
             .ValueGeneratedOnAdd()
             .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+
+        modelBuilder.Entity<WorditionCard>()
+            .OwnsOne(c => c.Intervals);
     }
 }

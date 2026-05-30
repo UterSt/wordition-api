@@ -1,9 +1,8 @@
-using System.Transactions;
 using FSRS.Core.Enums;
 using FSRS.Core.Models;
 using Wordition.Domain.Entities;
 
-namespace Wordition.Application.DTO;
+namespace Wordition.Application.DTO.Cards;
 
 public static class CardMapping
 {
@@ -17,9 +16,10 @@ public static class CardMapping
         Language = card.Translation.Language,
         Due = card.Due,
         CreatedAt = card.CreatedAt,
+        Intervals = card.Intervals,
     };
 
-    public static WorditionCard ToWorditionCard(this CardRequest cardRequest, WordTranslation translation, Word word,
+    public static WorditionCard ToWorditionCard(this CardRequest cardRequest, WordTranslation translation, Word word, LengthRepetitionIntervals intervals,
         Guid userId) => new()
     {
         Word = word,
@@ -28,7 +28,8 @@ public static class CardMapping
         UserId = userId,
         Due = DateTime.UtcNow,
         State = State.Learning,
-        LastReviewedAt = null
+        LastReviewedAt = null,
+        Intervals = intervals,
     };
 
     public static Word ToWord(this CardRequest cardRequest) => new()

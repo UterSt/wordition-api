@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Wordition.Application.DTO;
+using Wordition.Application.DTO.Auth;
 using Wordition.Application.Interfaces.Services;
 
 namespace Wordition.API.Controllers;

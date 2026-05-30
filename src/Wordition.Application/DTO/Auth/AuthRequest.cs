@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Wordition.Domain.ValueObjects;
 
-namespace Wordition.Application.DTO;
+namespace Wordition.Application.DTO.Auth;
 
 public class AuthRequest
 {

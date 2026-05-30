@@ -79,12 +79,6 @@ if (app.Environment.IsDevelopment())
     });
 }
 
-app.MapPost("/test", async (ITranslatorService trans, TranslationRequest request) =>
-{
-    var result =  await trans.GetTranslationAsync(request);
-    return Results.Ok(result);
-});
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHttpsRedirection();

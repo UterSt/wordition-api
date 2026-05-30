@@ -1,4 +1,4 @@
-using Wordition.Application.DTO;
+using Wordition.Application.DTO.Texts;
 using Wordition.Domain.Entities;
 
 namespace Wordition.Application.Interfaces.Services;

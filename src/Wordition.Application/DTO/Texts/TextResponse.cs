@@ -1,7 +1,7 @@
 using Wordition.Domain.Entities;
 using Wordition.Domain.Enums;
 
-namespace Wordition.Application.DTO;
+namespace Wordition.Application.DTO.Texts;
 
 public record TextResponse()
 {

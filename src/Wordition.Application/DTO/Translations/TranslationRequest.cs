@@ -1,6 +1,6 @@
 using Wordition.Domain.Enums;
 
-namespace Wordition.Application.DTO;
+namespace Wordition.Application.DTO.Translations;
 
 public class TranslationRequest
 {

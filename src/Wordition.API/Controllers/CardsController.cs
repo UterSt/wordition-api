@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Wordition.Application.DTO;
+using Wordition.Application.DTO.Cards;
 using Wordition.Application.Interfaces.Services;
 
 namespace Wordition.API.Controllers;
@@ -32,7 +33,7 @@ public class CardsController : ControllerBase
         return Ok(card);
     }
 
-    [HttpPost("create")]
+    [HttpPost()]
     public async Task<IActionResult> AddCard(CardRequest cardRequest)
     {
         var response = await _cardService.AddCardAsync(cardRequest, GetUserId());

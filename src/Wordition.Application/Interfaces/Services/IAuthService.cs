@@ -1,4 +1,5 @@
 using Wordition.Application.DTO;
+using Wordition.Application.DTO.Auth;
 using Wordition.Domain.Entities;
 using Wordition.Domain.ValueObjects;
 

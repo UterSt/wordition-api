@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Wordition.Application.DTO;
+using Wordition.Application.DTO.Auth;
 using Wordition.Application.Interfaces.Repositories;
 using Wordition.Application.Interfaces.Services;
 using Wordition.Domain.Entities;

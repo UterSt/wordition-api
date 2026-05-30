@@ -1,4 +1,4 @@
-namespace Wordition.Application.DTO;
+namespace Wordition.Application.DTO.Auth;
 
 public record AuthTokenDto()
 {

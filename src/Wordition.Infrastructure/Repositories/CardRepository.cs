@@ -18,6 +18,8 @@ public class CardRepository : ICardRepository
     public async Task<List<WorditionCard>> GetCardsAsync(Guid userId)
     {
         var result = await _db.Cards
+            .Include(card => card.Translation)
+            .Include(card => card.Word)
             .Where(card => card.UserId == userId)
             .ToListAsync();
         return result;
@@ -26,6 +28,8 @@ public class CardRepository : ICardRepository
     public async Task<WorditionCard?> GetCardAsync(Guid userId, Guid cardId)
     {
         var result = await _db.Cards
+            .Include(card => card.Translation)
+            .Include(card => card.Word)
             .Where(card => card.Id == cardId && card.UserId == userId)
             .SingleOrDefaultAsync();
         return result;

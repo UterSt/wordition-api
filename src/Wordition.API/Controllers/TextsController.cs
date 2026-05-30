@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Wordition.Application.DTO;
+using Wordition.Application.DTO.Texts;
 using Wordition.Application.Interfaces.Services;
 
 namespace Wordition.API.Controllers;
@@ -32,7 +32,7 @@ public class TextsController : ControllerBase
         return Ok(tokenizerText);
     }
 
-    [HttpPost("create")]
+    [HttpPost()]
     public async Task<IActionResult> AddText(TextRequest request)
     {
         var response = await _textService.AddTextAsync(request,  GetUserId());

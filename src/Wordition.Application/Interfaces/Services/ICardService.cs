@@ -1,4 +1,5 @@
 using Wordition.Application.DTO;
+using Wordition.Application.DTO.Cards;
 
 namespace Wordition.Application.Interfaces.Services;
 
