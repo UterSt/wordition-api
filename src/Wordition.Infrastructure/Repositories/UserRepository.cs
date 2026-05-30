@@ -19,9 +19,10 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public Task<User?> GetByIdAsync(Guid id)
+    public async Task<User?> GetByIdAsync(Guid id)
     {
-        throw new NotImplementedException();
+        var user = await _db.Users.FirstOrDefaultAsync(u => u.Id == id);
+        return user;
     }
 
     public async Task AddUserAsync(User user)
@@ -30,14 +31,18 @@ public class UserRepository : IUserRepository
         await _db.SaveChangesAsync();
     }
 
-    public Task<User?> UpdateAsync(User user)
+    public async Task UpdateAsync(User user)
     {
-        throw new NotImplementedException();
+        var userEntity = await _db.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+        if (userEntity == null) return;
+        _db.Entry(userEntity).CurrentValues.SetValues(user);
+        await _db.SaveChangesAsync();
     }
 
-    public bool DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        throw new NotImplementedException();
+        await _db.Users.Where(u => u.Id == id).ExecuteDeleteAsync();
+        await _db.SaveChangesAsync();
     }
 
     public async Task AddRefreshTokenAsync(RefreshToken refreshToken)

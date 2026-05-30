@@ -33,9 +33,7 @@ public class TextService : ITextService
 
     public async Task<TextResponse> AddTextAsync(TextRequest textRequest, Guid userId)
     {
-        var text = textRequest.ToEntity(userId);
-        text.Id = Guid.NewGuid();
-        text.CreatedAt = DateTime.UtcNow;
+        var text = textRequest.ToEntity(DateTime.UtcNow, userId);
         await _textRepository.AddTextAsync(text);
         return text.ToResponse();
     }
@@ -45,7 +43,7 @@ public class TextService : ITextService
         var text = await _textRepository.GetTextAsync(userId, textId);
         if (text == null)
             throw new NotFoundException("Text", textId);
-        text = textRequest.ToEntity(userId);
+        text = textRequest.ToEntity(text.CreatedAt, userId);
         text.Id = textId;
         await _textRepository.UpdateTextAsync(text);
     }

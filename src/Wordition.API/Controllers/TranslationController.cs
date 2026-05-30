@@ -8,7 +8,7 @@ namespace Wordition.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]/v1")]
+[Route("api/v1/[controller]")]
 public class TranslationController : ControllerBase
 {
     private ITranslatorService _translatorService;

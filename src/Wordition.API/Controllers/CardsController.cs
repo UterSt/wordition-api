@@ -9,7 +9,7 @@ namespace Wordition.API.Controllers;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]/v1")]
+[Route("api/v1/[controller]")]
 public class CardsController : ControllerBase
 {
     private readonly ICardService _cardService;
@@ -59,6 +59,14 @@ public class CardsController : ControllerBase
     {
        var response = await _cardService.ReviewCardAsync(cardReviewRequest, GetUserId(), cardId);
        return Ok(response);
+    }
+
+    [HttpGet("due")]
+    public async Task<IActionResult> GetDue()
+    {
+        var response = await _cardService.GetAllCardAsync(GetUserId());
+        var result = response.Where(r => r.Due < DateTime.UtcNow).ToList();
+        return Ok(result);
     }
     
     private Guid GetUserId()

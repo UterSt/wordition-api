@@ -8,7 +8,7 @@ using Wordition.Application.Interfaces.Services;
 using Wordition.Domain.Entities;
 using Wordition.Domain.Exceptions;
 
-namespace Wordition.Infrastructure.Services;
+namespace Wordition.Application.Services;
 
 public class CardService : ICardService
 {
@@ -57,7 +57,7 @@ public class CardService : ICardService
         var word = cardRequest.ToWord();
         var translation = cardRequest.ToWordTranslation(word);
         card.UpdateFromRequest(cardRequest, translation, word);
-        await _cardRepository.UpdateCardAsync(card);
+        await _cardRepository.UpdateCardContentAsync(card);
     }
 
     public async Task DeleteCardAsync(Guid userId, Guid cardId)
@@ -78,7 +78,7 @@ public class CardService : ICardService
         var (updateCard, reviewLog) = scheduler.ReviewCard(card, cardReviewRequest.Rating, DateTime.UtcNow, cardReviewRequest.ReviewDuration);
         worditionCard.UpdateFromFsrs(updateCard);
         worditionCard.Intervals = GetRepetitionIntervals(updateCard);
-        await _cardRepository.UpdateCardAsync(worditionCard);
+        await _cardRepository.UpdateCardReviewAsync(worditionCard);
         var log = reviewLog.ToWorditionReviewLog(worditionCard);
         await _cardRepository.AddReviewLogAsync(log);
         return worditionCard.ToResponse();

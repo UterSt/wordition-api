@@ -41,14 +41,41 @@ public class CardRepository : ICardRepository
         await _db.SaveChangesAsync();
     }
 
-    public async Task UpdateCardAsync(WorditionCard card)
+    public async Task UpdateCardContentAsync(WorditionCard card)
     {
-        var result = await _db.Cards
+        var cardEntity = await _db.Cards
+            .Include(c => c.Translation)
+            .Include(c => c.Word)
             .Where(c => c.Id == card.Id && c.UserId == card.UserId)
-            .FirstOrDefaultAsync();
-        if (result == null) return;
-        _db.Entry(result).CurrentValues.SetValues(card);
+            .SingleOrDefaultAsync();
+        if (cardEntity == null) return;
+        
+        cardEntity.ContextSentence = card.ContextSentence;
+        cardEntity.Translation.Language = card.Translation.Language;
+        cardEntity.Translation.Translation = card.Translation.Translation;
+        cardEntity.Translation.Language = card.Translation.Language;
+        cardEntity.Translation.Definition = card.Translation.Definition;
+        cardEntity.Word.Value = card.Word.Value;
+        cardEntity.Word.Language = card.Word.Language;
+        
         await _db.SaveChangesAsync();
+    }
+    public async Task UpdateCardReviewAsync(WorditionCard card)
+    {
+        await _db.Cards
+            .Where(c => c.Id == card.Id &&  c.UserId == card.UserId)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(c => c.State, card.State)
+                .SetProperty(c=> c.Step, card.Step)
+                .SetProperty(c => c.Due, card.Due)
+                .SetProperty(c => c.Stability, card.Stability)
+                .SetProperty(c => c.Difficulty, card.Difficulty)
+                .SetProperty(c => c.LastReviewedAt, card.LastReviewedAt)
+                .SetProperty(c => c.Intervals.Again, card.Intervals.Again)
+                .SetProperty(c => c.Intervals.Hard, card.Intervals.Hard)
+                .SetProperty(c => c.Intervals.Good, card.Intervals.Good)
+                .SetProperty(c => c.Intervals.Easy, card.Intervals.Easy)
+            );
     }
 
     public async Task DeleteCardAsync(Guid userId, Guid cardId)

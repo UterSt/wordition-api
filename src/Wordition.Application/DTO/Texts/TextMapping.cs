@@ -13,12 +13,13 @@ public static class TextMapping
         Language = text.Language,
     };
 
-    public static Text ToEntity(this TextRequest request, Guid userId) => new()
+    public static Text ToEntity(this TextRequest request, DateTime createAt, Guid userId) => new()
     {
         Title = request.Title,
         Content = request.Text,
         IsPublic = request.IsPublic,
         Language = request.Language,
-        UserId = userId
+        UserId = userId,
+        CreatedAt = createAt,
     };
 }
