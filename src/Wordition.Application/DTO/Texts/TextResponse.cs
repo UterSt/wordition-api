@@ -10,4 +10,5 @@ public record TextResponse()
     public Language Language { get; set; }
     public bool IsPublic {get; set; }
     public DateTime CreatedAt { get; set; }
+    public List<Token> Tokens { get; set; }
 };

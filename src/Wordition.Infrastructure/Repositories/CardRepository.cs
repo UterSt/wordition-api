@@ -27,11 +27,12 @@ public class CardRepository : ICardRepository
 
     public async Task<List<WorditionCard>> GetDueCardsAsync(Guid userId)
     {
+        var learnAheadMinutes = 20;
         var result = await _db.Cards
             .Include(card => card.Translation)
             .Include(card => card.Word)
             .Where(card => card.UserId == userId)
-            .Where(card => card.Due <  DateTime.UtcNow)
+            .Where(card => card.Due <  DateTime.UtcNow.AddMinutes(learnAheadMinutes))
             .ToListAsync();
         return result;
     }

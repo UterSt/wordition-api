@@ -22,13 +22,15 @@ public class TextService : ITextService
         return texts.Select(t => t.ToResponse()).ToList();
     }
 
-    public async Task<List<Token>> GetTextAsync(Guid userId, Guid textId)
+    public async Task<TextResponse> GetTextAsync(Guid userId, Guid textId)
     {
         var text = await _textRepository.GetTextAsync(userId, textId);
         if (text == null)
             throw new NotFoundException("Text", textId);
         var tokenizerText = TextTokenizer.Tokenize(text.Content);
-        return tokenizerText;
+        var response = text.ToResponse();
+        response.Tokens = tokenizerText;
+        return response;
     }
 
     public async Task<TextResponse> AddTextAsync(TextRequest textRequest, Guid userId)

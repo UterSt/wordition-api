@@ -17,6 +17,8 @@ public static class CardMapping
         Due = card.Due,
         CreatedAt = card.CreatedAt,
         Intervals = card.Intervals,
+        State = card.State,
+        LastReviewedAt = card.LastReviewedAt,
     };
 
     public static WorditionCard ToWorditionCard(this CardRequest cardRequest, WordTranslation translation, Word word, LengthRepetitionIntervals intervals,

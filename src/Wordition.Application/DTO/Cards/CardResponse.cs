@@ -1,3 +1,4 @@
+using FSRS.Core.Enums;
 using Wordition.Domain.Entities;
 using Wordition.Domain.Enums;
 
@@ -13,5 +14,7 @@ public class CardResponse
     public Language Language { get; set; }
     public DateTime Due {get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime? LastReviewedAt { get; set; }
+    public State State { get; set; }
     public required LengthRepetitionIntervals Intervals { get; set; }
 }
