@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 using Scalar.AspNetCore;
 using Wordition.API.OpenApi;
 using Wordition.Application.DTO;
+using Wordition.Application.Interfaces;
 using Wordition.Application.Interfaces.Repositories;
 using Wordition.Application.Interfaces.Services;
 using Wordition.Application.Services;
@@ -58,6 +59,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddMediatR(configuration =>
+{
+    configuration.RegisterServicesFromAssemblyContaining<IApplicationAssemblyMarker>();
+});
 builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -72,7 +77,7 @@ builder.Services.AddSingleton<ISchedulerFactory>(new SchedulerFactory(new Schedu
     MaximumInterval = 365,
     EnableFuzzing = true,
 }));
-builder.Services.AddScoped<ICardService, CardService>();
+//builder.Services.AddScoped<ICardService, CardService>();
 
 var app = builder.Build();
 
