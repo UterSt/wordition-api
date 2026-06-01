@@ -58,11 +58,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+builder.Services.AddScoped<IUnitOfWork, EfUnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IUserRepository,  UserRepository>();
 builder.Services.AddScoped<ITextService, TextService>();
-builder.Services.AddScoped<ITextRepository,  TextRepository>();
 builder.Services.AddHttpClient<ITranslatorService, MyMemoryTranslatorService>(f =>
 {
     f.BaseAddress = new Uri(builder.Configuration["Translator:BaseAddress"]!);
@@ -74,7 +73,6 @@ builder.Services.AddSingleton<ISchedulerFactory>(new SchedulerFactory(new Schedu
     EnableFuzzing = true,
 }));
 builder.Services.AddScoped<ICardService, CardService>();
-builder.Services.AddScoped<ICardRepository, CardRepository>();
 
 var app = builder.Build();
 

@@ -12,18 +12,18 @@ namespace Wordition.Application.Services;
 
 public class CardService : ICardService
 {
-    private readonly ICardRepository _cardRepository;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly ISchedulerFactory  _schedulerFactory;
 
-    public CardService(ICardRepository cardRepository, ISchedulerFactory schedulerFactory)
+    public CardService(IUnitOfWork unitOfWork, ISchedulerFactory schedulerFactory)
     {
-        _cardRepository = cardRepository;
+        _unitOfWork = unitOfWork;
         _schedulerFactory = schedulerFactory;
     }
     
     public async Task<List<CardResponse>> GetAllCardAsync(Guid userId)
     {
-        var response = await _cardRepository.GetCardsAsync(userId);
+        var response = await _unitOfWork.Card.GetCardsAsync(userId);
         var result  = response
             .Select(card => card.ToResponse())
             .ToList();
@@ -32,7 +32,7 @@ public class CardService : ICardService
 
     public async Task<List<CardResponse>> GetAllDueCardsAsync(Guid userId)
     {
-        var response = await _cardRepository.GetDueCardsAsync(userId);
+        var response = await _unitOfWork.Card.GetDueCardsAsync(userId);
         var result  = response
             .Select(card => card.ToResponse())
             .ToList();
@@ -41,7 +41,7 @@ public class CardService : ICardService
 
     public async Task<CardResponse> GetCardAsync(Guid userId, Guid cardId)
     {
-        var response = await _cardRepository.GetCardAsync(userId, cardId);
+        var response = await _unitOfWork.Card.GetCardAsync(userId, cardId);
         if (response == null)
             throw new NotFoundException("Card",  cardId);
         return response.ToResponse();
@@ -54,32 +54,35 @@ public class CardService : ICardService
         var card = new Card();
         var intervals = GetRepetitionIntervals(card);
         var worditionCard = cardRequest.ToWorditionCard(translation, word, intervals, userId);
-        await _cardRepository.AddCardAsync(worditionCard);
+        await _unitOfWork.Card.AddCardAsync(worditionCard);
+        await _unitOfWork.SaveAsync();
         return worditionCard.ToResponse();
     }
 
     public async Task UpdateCardAsync(CardRequest cardRequest, Guid userId, Guid cardId)
     {
-        var card = await _cardRepository.GetCardAsync(userId, cardId);
+        var card = await _unitOfWork.Card.GetCardAsync(userId, cardId);
         if (card == null)
             throw new NotFoundException("Card", cardId);
         var word = cardRequest.ToWord();
         var translation = cardRequest.ToWordTranslation(word);
         card.UpdateFromRequest(cardRequest, translation, word);
-        await _cardRepository.UpdateCardContentAsync(card);
+        await _unitOfWork.Card.UpdateCardContentAsync(card);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task DeleteCardAsync(Guid userId, Guid cardId)
     {
-        var card = await _cardRepository.GetCardAsync(userId, cardId);
+        var card = await _unitOfWork.Card.GetCardAsync(userId, cardId);
         if (card == null)
             throw new NotFoundException("Card", cardId);
-        await _cardRepository.DeleteCardAsync(userId, cardId);
+        await _unitOfWork.Card.DeleteCardAsync(userId, cardId);
+        await _unitOfWork.SaveAsync();
     }
 
     public async Task<CardResponse> ReviewCardAsync(CardReviewRequest cardReviewRequest, Guid userId, Guid cardId)
     {
-        var worditionCard = await _cardRepository.GetCardAsync(userId, cardId);
+        var worditionCard = await _unitOfWork.Card.GetCardAsync(userId, cardId);
         if (worditionCard == null)
             throw new NotFoundException("Card", cardId);
         var card = worditionCard.ToFsrsCard();
@@ -87,9 +90,10 @@ public class CardService : ICardService
         var (updateCard, reviewLog) = scheduler.ReviewCard(card, cardReviewRequest.Rating, DateTime.UtcNow, cardReviewRequest.ReviewDuration);
         worditionCard.UpdateFromFsrs(updateCard);
         worditionCard.Intervals = GetRepetitionIntervals(updateCard);
-        await _cardRepository.UpdateCardReviewAsync(worditionCard);
+        await _unitOfWork.Card.UpdateCardReviewAsync(worditionCard);
         var log = reviewLog.ToWorditionReviewLog(worditionCard);
-        await _cardRepository.AddReviewLogAsync(log);
+        await _unitOfWork.Card.AddReviewLogAsync(log);
+        await _unitOfWork.SaveAsync();
         return worditionCard.ToResponse();
     }
 

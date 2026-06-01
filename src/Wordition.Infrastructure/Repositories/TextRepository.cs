@@ -29,7 +29,6 @@ public class TextRepository :  ITextRepository
     public async Task AddTextAsync(Text text)
     {
         await _db.Texts.AddAsync(text);
-        await _db.SaveChangesAsync();
     }
 
     public async Task UpdateTextAsync(Text text)
@@ -37,12 +36,10 @@ public class TextRepository :  ITextRepository
         var textEntity = await _db.Texts.Where(t => t.UserId == text.UserId).FirstOrDefaultAsync(t => t.Id == text.Id);
         if (textEntity == null) return;
         _db.Entry(textEntity).CurrentValues.SetValues(text);
-        await _db.SaveChangesAsync();
     }
 
     public async Task DeleteTextAsync(Guid userId, Guid textId)
     {
         await _db.Texts.Where(t => t.Id == textId && t.UserId == userId).ExecuteDeleteAsync();
-        await _db.SaveChangesAsync();
     }
 }

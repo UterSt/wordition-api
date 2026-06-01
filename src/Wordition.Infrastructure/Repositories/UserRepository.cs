@@ -28,7 +28,6 @@ public class UserRepository : IUserRepository
     public async Task AddUserAsync(User user)
     {
         await _db.Users.AddAsync(user);
-        await _db.SaveChangesAsync();
     }
 
     public async Task UpdateAsync(User user)
@@ -36,19 +35,16 @@ public class UserRepository : IUserRepository
         var userEntity = await _db.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
         if (userEntity == null) return;
         _db.Entry(userEntity).CurrentValues.SetValues(user);
-        await _db.SaveChangesAsync();
     }
 
     public async Task DeleteAsync(Guid id)
     {
         await _db.Users.Where(u => u.Id == id).ExecuteDeleteAsync();
-        await _db.SaveChangesAsync();
     }
 
     public async Task AddRefreshTokenAsync(RefreshToken refreshToken)
     {
         await _db.RefreshTokens.AddAsync(refreshToken);
-        await _db.SaveChangesAsync();
     }
 
     public async Task<RefreshToken?> GetRefreshTokenAsync(string refreshToken)
@@ -59,12 +55,10 @@ public class UserRepository : IUserRepository
     public async Task RemoveRefreshTokenAsync(string refreshToken)
     {
         await _db.RefreshTokens.Where(r => r.Token == refreshToken).ExecuteDeleteAsync();
-        await _db.SaveChangesAsync();
     }
 
     public async Task RemoveRefreshTokenAsync(Guid id)
     {
         await _db.RefreshTokens.Where(r => r.UserId == id).ExecuteDeleteAsync();
-        await _db.SaveChangesAsync();
     }
 }

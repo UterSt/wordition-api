@@ -50,7 +50,6 @@ public class CardRepository : ICardRepository
     public async Task AddCardAsync(WorditionCard card)
     {
         await _db.Cards.AddAsync(card);
-        await _db.SaveChangesAsync();
     }
 
     public async Task UpdateCardContentAsync(WorditionCard card)
@@ -68,8 +67,6 @@ public class CardRepository : ICardRepository
         cardEntity.Translation.Definition = card.Translation.Definition;
         cardEntity.Word.Value = card.Word.Value;
         cardEntity.Word.Language = card.Word.Language;
-        
-        await _db.SaveChangesAsync();
     }
     public async Task UpdateCardReviewAsync(WorditionCard card)
     {
@@ -94,13 +91,11 @@ public class CardRepository : ICardRepository
         await _db.Cards
             .Where(card => card.UserId == userId && card.Id == cardId)
             .ExecuteDeleteAsync();
-        await _db.SaveChangesAsync();
     }
 
     public async Task AddReviewLogAsync(CardReviewLog reviewLog)
     {
         await _db.CardReviewLogs.AddAsync(reviewLog);
-        await _db.SaveChangesAsync();
     }
 
     public async Task<List<CardReviewLog>> GetCardReviewLogsAsync(Guid userId, Guid cardId)
